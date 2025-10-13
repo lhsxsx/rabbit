@@ -18,7 +18,12 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        // 自动导入 Element Plus 组件
+        ElementPlusResolver({
+          importStyle: 'sass', // 自定义主题需要配置为 sass
+        }),
+      ],
     }),
   ],
   resolve: {
@@ -26,4 +31,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+   css: {
+    preprocessorOptions: {
+      scss: {
+        // 全局导入主题定制文件
+        additionalData: `@use "@/styles/element/index.scss" as *;`,
+      },
+    },
+  }
 })
