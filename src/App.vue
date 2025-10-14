@@ -5,9 +5,7 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <RouterView />
-  <div class="test">
-    test scss
-  </div>
+  
 </template>
 
 <style scoped lang="scss">
