@@ -1,7 +1,10 @@
 <!-- LayoutHeaderSticky.vue -->
 <script setup>
 import { useScroll } from '@vueuse/core'
+import { useCategoryStore } from '@/stores/category';
 const { y } = useScroll(window) // 监听窗口滚动位置
+const categoryStore = useCategoryStore();
+// 页面滚动时获取分类数据（可选，根据实际需求决定是否需要）
 </script>
 
 <template>
@@ -16,32 +19,8 @@ const { y } = useScroll(window) // 监听窗口滚动位置
         <li class="home">
           <RouterLink to="/">首页</RouterLink>
         </li>
-        <li>
-          <RouterLink to="/category/1">居家</RouterLink> <!-- 建议改为动态路由（示例） -->
-        </li>
-        <li>
-          <RouterLink to="/category/2">美食</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/category/3">服饰</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/category/4">母婴</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/category/5">个护</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/category/6">严选</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/category/7">数码</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/category/8">运动</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/category/9">杂项</RouterLink>
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
+          <RouterLink :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </li>
       </ul>
 
