@@ -19,7 +19,7 @@ const getNewList = async () => {
     <ul class="goods-list">
       <li v-for="item in newList" :key="item.id">
         <RouterLink to="/">
-          <img :src="item.picture" :alt="item.name" />
+          <img v-img-lazy="item.picture" :alt="item.name" />
           <p class="name">{{ item.name }}</p>
           <p class="price">&yen;{{ item.price }}</p>
         </RouterLink>
@@ -40,7 +40,7 @@ const getNewList = async () => {
   margin: 0 auto;
 
   li {
-    width: 200px;
+    width: 230px;
     height: 100%;
     background: #f0f9f4;
     border-radius: 8px;

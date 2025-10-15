@@ -24,7 +24,7 @@ defineProps({
       </div>
       <!-- 主体内容区域 -->
       <div class="content">
-        <slot></slot>
+        <slot />
       </div>
     </div>
   </div>
