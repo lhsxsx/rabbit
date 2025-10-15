@@ -1,33 +1,12 @@
 <!-- LayoutHeaderSticky.vue -->
 <script setup>
-// 若后续需要实现滚动显示/隐藏逻辑，需导入以下API（当前先预留）
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router' // 若需路由相关操作，可导入
-
-// 滚动监听逻辑（实现导航栏显示/隐藏的核心，补充后可直接用）
-const isShow = ref(false) // 控制导航栏显示/隐藏的响应式变量
-const router = useRouter()
-
-// 监听页面滚动
-const handleScroll = () => {
-  // 页面滚动超过 100px 时显示导航栏，否则隐藏（可根据需求调整阈值）
-  isShow.value = window.scrollY > 100
-}
-
-// 组件挂载时添加滚动监听
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-// 组件卸载时移除滚动监听（避免内存泄漏）
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
+import { useScroll } from '@vueuse/core'
+const { y } = useScroll(window) // 监听窗口滚动位置
 </script>
 
 <template>
   <!-- 动态绑定 .show 类：isShow 为 true 时显示导航栏 -->
-  <div class="app-header-sticky" :class="{ show: isShow }">
+  <div class="app-header-sticky" :class="{ show: y > 78 }">
     <div class="container">
       <!-- Logo 路由链接：跳转到首页 -->
       <RouterLink class="logo" to="/" />
@@ -115,7 +94,7 @@ onUnmounted(() => {
     background-size: 160px auto;
     // 若 Logo 图片加载失败，可添加文字 fallback
     &::after {
-      content: "小兔鲜";
+      content: "";
       display: inline-block;
       width: 160px;
       height: 80px;
