@@ -19,7 +19,7 @@ defineProps({
 <style scoped lang="scss">
 .goods-item {
       display: block;
-      width: 100%;
+      width: 200px;
       height: 100%;
       padding: 20px;
       text-align: center;

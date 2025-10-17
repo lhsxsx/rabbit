@@ -1,13 +1,18 @@
 <script setup>
-import { getCategoryAPI } from '@/apis/category';
-import { useRoute } from 'vue-router';
-import { onMounted, ref } from 'vue';
-const categorydate=ref({})
-const route=useRoute()
-onMounted(async()=>{
-  const res=await getCategoryAPI(route.params.id)
-  categorydate.value=res.result
-  console.log(categorydate.value)
+import { getCategoryAPI } from '@/apis/category'
+import { useRoute } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { useBannerStore } from '@/stores/banner'
+import GoodsItem from '../Home/components/GoodsItem.vue' // 确保路径正确
+
+const bannerStore = useBannerStore()
+const categoryData = ref({})
+const route = useRoute()
+
+onMounted(async () => {
+  bannerStore.getBanner()
+  const res = await getCategoryAPI(route.params.id)
+  categoryData.value = res.result
 })
 </script>
 
@@ -18,13 +23,45 @@ onMounted(async()=>{
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>{{ categorydate.name }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-    </div>
-  </div>
-</template>
 
+      <!-- 轮播图 -->
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in bannerStore.bannerList" :key="item.id">
+            <img :src="item.imgUrl" alt="Banner image">
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+
+      <!-- 子分类 -->
+      <div class="sub-list">
+        <h3>全部分类</h3>
+        <ul>
+          <li v-for="i in categoryData.children" :key="i.id">
+            <RouterLink to="/">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+
+      <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <GoodsItem v-for="good in item.goods" :good="good" :key="good.id" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</template>
 
 <style scoped lang="scss">
 .top-category {
@@ -61,7 +98,7 @@ onMounted(async()=>{
           }
 
           p {
-            line-height: 40px;
+            line-height: 20px;
           }
 
           &:hover {
@@ -79,9 +116,9 @@ onMounted(async()=>{
 
     .head {
       .xtx-more {
-        position: absolute;
+        //position: absolute;
         top: 20px;
-        right: 20px;
+        right: -20px;
       }
 
       .tag {
@@ -96,12 +133,15 @@ onMounted(async()=>{
     .body {
       display: flex;
       justify-content: space-around;
-      padding: 0 40px 30px;
+      padding: 0 20px 10px;
+
     }
   }
 
-  .bread-container {
-    padding: 25px 0;
-  }
+}
+
+
+.bread-container {
+  padding: 25px 0;
 }
 </style>
