@@ -4,16 +4,27 @@ import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { useBannerStore } from '@/stores/banner'
 import GoodsItem from '../Home/components/GoodsItem.vue' // 确保路径正确
+import { onBeforeRouteUpdate } from 'vue-router'
+
 
 const bannerStore = useBannerStore()
+
+
+
 const categoryData = ref({})
 const route = useRoute()
-
-onMounted(async () => {
-  bannerStore.getBanner()
-  const res = await getCategoryAPI(route.params.id)
+const getCategory=async ( id=route.params.id) => {
+  const res = await getCategoryAPI(id)
   categoryData.value = res.result
+}
+onMounted(()=>{
+  getCategory()
 })
+onBeforeRouteUpdate((to)=>{
+  console.log('路由更新了')
+  getCategory(to.params.id)
+})
+
 </script>
 
 <template>
