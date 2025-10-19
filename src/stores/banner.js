@@ -5,7 +5,10 @@ export const useBannerStore = defineStore('banner', () => {
 const bannerList=ref([])
 
 const getBanner=async()=>{
-  const res=await getBannerAPI()
+  const res=await getBannerAPI({
+    // distributionSite: '2'
+  })
+
   console.log(res)
   bannerList.value=res.result
 }
