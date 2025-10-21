@@ -17,19 +17,23 @@ onMounted(()=>
 )
 
 const goodList=ref([])
-const reqDate=ref({
+const reqData=ref({
   categoryId:route.params.id,
   page:1,
   pageSize:20,
   sortField:'publishTime',
 })
 const getgoodList=async()=>{
-  const res=await getSubCategoryAPI(reqDate.value)
+  const res=await getSubCategoryAPI(reqData.value)
   goodList.value=res.result.items
 }
 onMounted(()=>
   getgoodList()
    )
+   const tabchange=()=>{
+    reqData.value.page=1
+    getgoodList()
+   }  
 </script>
 
 <template>
@@ -46,7 +50,7 @@ onMounted(()=>
     <!-- 主体内容区域 -->
     <div class="sub-container">
       <!-- 标签页 -->
-      <el-tabs>
+      <el-tabs v-model="reqData.sortField" @tab-change="tabchange">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
