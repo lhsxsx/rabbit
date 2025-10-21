@@ -1,8 +1,10 @@
 <script setup>
 // 这里可以添加你的脚本逻辑
-import {getCategoryFilterAPI} from '@/apis/category'
+import {getCategoryFilterAPI,getSubCategoryAPI} from '@/apis/category'
 import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
+import GoodsItem from '../Home/components/GoodsItem.vue' // 确保路径正确
+
 const categoryData = ref({})
 const route = useRoute()
 const getcategoryDate=async()=>{
@@ -13,6 +15,21 @@ onMounted(()=>
   getcategoryDate()
 
 )
+
+const goodList=ref([])
+const reqDate=ref({
+  categoryId:route.params.id,
+  page:1,
+  pageSize:20,
+  sortField:'publishTime',
+})
+const getgoodList=async()=>{
+  const res=await getSubCategoryAPI(reqDate.value)
+  goodList.value=res.result.items
+}
+onMounted(()=>
+  getgoodList()
+   )
 </script>
 
 <template>
@@ -38,6 +55,7 @@ onMounted(()=>
       <!-- 商品列表 -->
       <div class="body">
         <!-- 商品列表内容 -->
+        <GoodsItem v-for="good in goodList" :good="good" :key="good.id" />
       </div>
     </div>
   </div>
