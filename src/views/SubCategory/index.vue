@@ -33,7 +33,19 @@ onMounted(()=>
    const tabchange=()=>{
     reqData.value.page=1
     getgoodList()
-   }  
+   }
+
+    const disabled=ref(false)
+    const load=async()=>{
+      console.log('加载更多')
+      reqData.value.page++
+      const res=await getSubCategoryAPI(reqData.value)
+      // goodList.value.push(...res.result.items)
+      goodList.value = [...goodList.value, ...res.result.items]
+      if(res.result.items.length===0){
+        disabled.value=true
+      }
+    }
 </script>
 
 <template>
@@ -57,7 +69,8 @@ onMounted(()=>
       </el-tabs>
 
       <!-- 商品列表 -->
-      <div class="body">
+      <!-- <div class="body" v-infinite-scroll="load" infinite-scroll-disabled="disabled"  > -->
+         <div class="body" v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
         <!-- 商品列表内容 -->
         <GoodsItem v-for="good in goodList" :good="good" :key="good.id" />
       </div>
