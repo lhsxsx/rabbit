@@ -1,33 +1,40 @@
 <script setup>
 import { getDetail } from '@/apis/detail';
 import { onMounted, ref } from 'vue';
+import DetailHot from './components/DetailHot.vue';
 import { useRoute } from 'vue-router';
-const goods=ref ({})
-const route=useRoute()
-const getGoods=async()=>{
-  const res = await getDetail( route.params.id )
-  goods.value=res.result
-}
-onMounted(() =>
-  getGoods()
-)
 
+const goods = ref({});
+const route = useRoute();
+
+const getGoods = async () => {
+  const res = await getDetail(route.params.id);
+  goods.value = res.result;
+};
+
+onMounted(() => {
+  getGoods();
+});
 </script>
 
 <template>
-  <div class="xtx-goods-page"   >
+  <div class="xtx-goods-page">
     <div class="container">
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/${goods.categories?.[1].id}`}"> {{ goods.categories?.[1].name }} </el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/sub/${goods.categories?.[0].id}` }"> {{ goods.categories?.[0].name }}
+          <el-breadcrumb-item :to="{ path: `/category/${goods.categories?.[1].id}` }">
+            {{ goods.categories?.[1].name }}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: `/category/sub/${goods.categories?.[0].id}` }">
+            {{ goods.categories?.[0].name }}
           </el-breadcrumb-item>
           <el-breadcrumb-item>抓绒保暖，毛毛虫子儿童运动鞋</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
+
       <!-- 商品信息 -->
-      <div class="info-container" >
+      <div class="info-container">
         <div>
           <div class="goods-info">
             <div class="media">
@@ -37,33 +44,33 @@ onMounted(() =>
               <ul class="goods-sales">
                 <li>
                   <p>销量人气</p>
-                  <p> {{goods.salesCount }}+ </p>
+                  <p>{{ goods.salesCount }}+</p>
                   <p><i class="iconfont icon-task-filling"></i>销量人气</p>
                 </li>
                 <li>
                   <p>商品评价</p>
-                  <p>{{goods.commentCount}}+</p>
+                  <p>{{ goods.commentCount }}+</p>
                   <p><i class="iconfont icon-comment-filling"></i>查看评价</p>
                 </li>
                 <li>
                   <p>收藏人气</p>
-                  <p>{{goods.collectCount}}+</p>
+                  <p>{{ goods.collectCount }}+</p>
                   <p><i class="iconfont icon-favorite-filling"></i>收藏商品</p>
                 </li>
                 <li>
                   <p>品牌信息</p>
-                  <p>{{goods?.brand?.name}}</p>
+                  <p>{{ goods?.brand?.name }}</p>
                   <p><i class="iconfont icon-dynamic-filling"></i>品牌主页</p>
                 </li>
               </ul>
             </div>
             <div class="spec">
               <!-- 商品信息区 -->
-              <p class="g-name"> {{ goods.name }} </p>
-              <p class="g-desc">{{ goods.desc }} </p>
+              <p class="g-name">{{ goods.name }}</p>
+              <p class="g-desc">{{ goods.desc }}</p>
               <p class="g-price">
                 <span>{{ goods.oldPrice }}</span>
-                <span> {{ goods.price }}</span>
+                <span>{{ goods.price }}</span>
               </p>
               <div class="g-service">
                 <dl>
@@ -80,6 +87,7 @@ onMounted(() =>
                   </dd>
                 </dl>
               </div>
+
               <!-- sku组件 -->
 
               <!-- 数据组件 -->
@@ -90,38 +98,41 @@ onMounted(() =>
                   加入购物车
                 </el-button>
               </div>
-
             </div>
           </div>
+
           <div class="goods-footer">
-            <div class="goods-article">
+            <div class="goods-content">
               <!-- 商品详情 -->
-              <div class="goods-tabs">
-                <nav>
-                  <a>商品详情</a>
-                </nav>
-                <div class="goods-detail">
-                  <!-- 属性 -->
-                  <ul class="attrs">
-                    <li v-for="item in goods.details?.properties" :key="item.value">
-                      <span class="dt">{{ item.name }}</span>
-                      <span class="dd">{{ item.value }}</span>
-                    </li>
-                  </ul>
-                  <!-- 图片 -->
-                  <img v-for="img in goods.details?.pictures" :key="img" :src="img" alt="" >
-
+              <div class="goods-article">
+                <div class="goods-tabs">
+                  <nav>
+                    <a>商品详情</a>
+                  </nav>
+                  <div class="goods-detail">
+                    <!-- 属性 -->
+                    <ul class="attrs">
+                      <li v-for="item in goods.details?.properties" :key="item.value">
+                        <span class="dt">{{ item.name }}</span>
+                        <span class="dd">{{ item.value }}</span>
+                      </li>
+                    </ul>
+                    <!-- 图片 -->
+                    <img v-for="img in goods.details?.pictures" :key="img" :src="img" alt="">
+                  </div>
+                </div>
               </div>
-            </div>
-            <!-- 24热榜+专题推荐 -->
-            <div class="goods-aside">
 
+              <!-- 24热榜+专题推荐 -->
+              <div class="goods-aside">
+                <DetailHot />
+                <DetailHot />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -145,39 +156,69 @@ onMounted(() =>
   }
 
   .goods-footer {
-    display: flex;
     margin-top: 20px;
 
+    .goods-content {
+      display: flex;
+      gap: 20px;
+    }
+
     .goods-article {
-      width: 940px;
-      margin-right: 20px;
+      flex: 1;
+      min-width: 0;
+      background: #fff;
     }
 
     .goods-aside {
       width: 280px;
-      min-height: 1000px;
+      flex-shrink: 0;
     }
   }
 
   .goods-tabs {
     min-height: 600px;
-    background: #fff;
+
+    nav {
+      height: 70px;
+      line-height: 70px;
+      display: flex;
+      border-bottom: 1px solid #f5f5f5;
+
+      a {
+        padding: 0 40px;
+        font-size: 18px;
+        position: relative;
+      }
+    }
   }
 
-  .goods-warn {
-    min-height: 600px;
-    background: #fff;
-    margin-top: 20px;
-  }
+  .goods-detail {
+    padding: 40px;
 
-  .number-box {
-    display: flex;
-    align-items: center;
+    .attrs {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
 
-    .label {
-      width: 60px;
-      color: #999;
-      padding-left: 10px;
+      li {
+        display: flex;
+        margin-bottom: 10px;
+        width: 50%;
+
+        .dt {
+          width: 100px;
+          color: #999;
+        }
+
+        .dd {
+          flex: 1;
+          color: #666;
+        }
+      }
+    }
+
+    > img {
+      width: 100%;
     }
   }
 
@@ -299,68 +340,13 @@ onMounted(() =>
       }
     }
   }
-}
 
-.goods-tabs {
-  min-height: 600px;
-  background: #fff;
-
-  nav {
-    height: 70px;
-    line-height: 70px;
-    display: flex;
-    border-bottom: 1px solid #f5f5f5;
-
-    a {
-      padding: 0 40px;
-      font-size: 18px;
-      position: relative;
-
-      >span {
-        color: $priceColor;
-        font-size: 16px;
-        margin-left: 10px;
-      }
-    }
-  }
-}
-
-.goods-detail {
-  padding: 40px;
-
-  .attrs {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
-
-    li {
-      display: flex;
-      margin-bottom: 10px;
-      width: 50%;
-
-      .dt {
-        width: 100px;
-        color: #999;
-      }
-
-      .dd {
-        flex: 1;
-        color: #666;
-      }
-    }
+  .btn {
+    margin-top: 20px;
   }
 
-  >img {
-    width: 100%;
+  .bread-container {
+    padding: 25px 0;
   }
-}
-
-.btn {
-  margin-top: 20px;
-
-}
-
-.bread-container {
-  padding: 25px 0;
 }
 </style>
