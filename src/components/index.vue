@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { useMouseInElement } from '@vueuse/core';
 import {watch} from 'vue'
 
+
 defineProps({
   imageList:{
     type:Array,
