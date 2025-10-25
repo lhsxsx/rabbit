@@ -1,9 +1,11 @@
 <script setup>
 import {ref} from 'vue'
-import { loginAPI } from '@/apis/user'
 import 'element-plus/es/components/message/style/css'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+const userStore=useUserStore()
 
 const form=ref({
   account:'',
@@ -42,8 +44,7 @@ const onSubmit=()=>{
   const{account, password}=form.value
   formref.value.validate(async(valid)=>{
     if(valid){
-      const res=await loginAPI({account, password})
-      console.log(res);
+      await userStore.getUserInfo({account,password})
       ElMessage({type:'success',message:'登录成功'})
       router.replace({path:'/'})
     }
