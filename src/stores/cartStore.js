@@ -3,7 +3,7 @@ import {ref} from 'vue'
 
 export const useCartStore= defineStore('cart',()=>{
   const cartList=ref([])
-  const Addcart=(goods)=>{
+  const addCart=(goods)=>{
     const item=cartList.value.find((item)=>goods.skuId===item.skuId)
     if(item){
       item.count++
@@ -12,7 +12,7 @@ export const useCartStore= defineStore('cart',()=>{
     }}
   return{
   cartList,
-  Addcart
+  addCart
    }
   },{
     persist:true

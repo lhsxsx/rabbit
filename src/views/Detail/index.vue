@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useCartStore } from '@/stores/cartStore';
 
-const cartStore=useCartStore
+const cartStore=useCartStore()
 const goods = ref({});
 const route = useRoute();
 
