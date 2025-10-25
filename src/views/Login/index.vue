@@ -1,5 +1,10 @@
 <script setup>
 import {ref} from 'vue'
+import { loginAPI } from '@/apis/user'
+import 'element-plus/es/components/message/style/css'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+
 const form=ref({
   account:'',
   password:'',
@@ -22,7 +27,7 @@ const rules={
     {
       validator:(rule,value,callback)=>{
         if(value){
-          callback
+          callback()
         }else {
           callback(new Error('请勾选协议'))
         }
@@ -31,11 +36,16 @@ const rules={
   ]
 }
 
+const  router=useRouter()
 const formref=ref(null)
 const onSubmit=()=>{
-  formref.value.validate((valid)=>{
+  const{account, password}=form.value
+  formref.value.validate(async(valid)=>{
     if(valid){
-      console.log('验证通过') 
+      const res=await loginAPI({account, password})
+      console.log(res);
+      ElMessage({type:'success',message:'登录成功'})
+      router.replace({path:'/'})
     }
     }
   )
