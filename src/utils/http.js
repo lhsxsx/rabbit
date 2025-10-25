@@ -2,6 +2,8 @@ import axios from 'axios'
 import 'element-plus/es/components/message/style/css'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
+
 
 // 创建axios实例
 const httpInstance = axios.create({
@@ -21,10 +23,15 @@ httpInstance.interceptors.request.use(config => {
 
 // axios响应拦截器
 httpInstance.interceptors.response.use(res => res.data, e => {
+  const userStore=useUserStore()
   ElMessage({
     type:'warning',
     message:e.response.data.message
   })
+  if(e.response.status===401){
+    userStore.clearUserInfo()
+    router.push('/login')
+  }
   return Promise.reject(e)
 })
 
