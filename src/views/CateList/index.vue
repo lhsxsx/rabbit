@@ -3,6 +3,10 @@ import { useCartStore } from '@/stores/cartStore'
 
 const cartStore=useCartStore()
 
+const singleCheck=(i,selected)=>{
+    cartStore.singleCheck(i.skuId,selected)
+}
+
 </script>
 
 <template>
@@ -26,7 +30,7 @@ const cartStore=useCartStore()
           <tbody>
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
-                <el-checkbox />
+                <el-checkbox :model-value="i.selected" @change="(selected=>singleCheck(i,selected))" />
               </td>
               <td>
                 <div class="goods">
@@ -72,7 +76,7 @@ const cartStore=useCartStore()
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          共 10 件商品，已选择 2 件，商品合计：
+          共 {{cartStore.allCount}}件商品，已选择 2 件，商品合计：
           <span class="red">¥ 200.00 </span>
         </div>
         <div class="total">
