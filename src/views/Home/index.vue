@@ -4,7 +4,7 @@ import HomeCategory from './components/HomeCategory.vue'
 import HomeNew from './components/HomeNew.vue'
 import HomeHot from './components/HomeHot.vue'
 import HomePruduct from './components/HomeProduct.vue'
-import{useBannerStore} from '@/stores/banner'
+import{useBannerStore} from '@/stores/bannersStore'
 import { onMounted } from 'vue'
 const bannerStore=useBannerStore()
 onMounted(()=>{

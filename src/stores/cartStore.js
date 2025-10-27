@@ -1,18 +1,22 @@
 import { defineStore } from "pinia";
 import {ref} from 'vue'
 import {computed} from 'vue'
-import{insertCartAPI,fineNewCartListAPI} from '@/apis/cart.js'
+import{insertCartAPI,fineNewCartListAPI,delCartAPI} from '@/apis/cart.js'
 import { useUserStore } from "./user";
 
 export const useCartStore= defineStore('cart',()=>{
   const cartList=ref([])
   const userStore=useUserStore()
   const isLogin=computed(()=>userStore.userInfo.token)
+
+  const updateNewCartList=async()=>{
+      const res=await fineNewCartListAPI()
+      cartList.value=res.result
+    }
   const addCart=async(goods)=>{
     if(isLogin.value){
       await insertCartAPI(goods.skuId,goods.count)
-      const res=await fineNewCartListAPI()
-      cartList.value=res.result
+      updateNewCartList()
     }else{
     const item=cartList.value.find((item)=>goods.skuId===item.skuId)
     if(item){
@@ -20,10 +24,14 @@ export const useCartStore= defineStore('cart',()=>{
   }else{
       cartList.value.push(goods)
     }}}
-  const delCart=(skuId)=>{
+  const delCart=async(skuId)=>{
+    if(isLogin.value){
+      await delCartAPI([skuId])
+      updateNewCartList()
+    }else{
     const idx=cartList.value.findIndex((item)=>skuId===item.skuId)
     cartList.value.splice(idx,1)
-  }
+  }}
   const singleCheck=(skuId,selected)=>{
     const item=cartList.value.find((item)=>skuId===item.skuId)
     if(item){
@@ -57,3 +65,4 @@ export const useCartStore= defineStore('cart',()=>{
     persist:true
   }
 )
+

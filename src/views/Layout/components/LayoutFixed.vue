@@ -1,7 +1,7 @@
 <!-- LayoutHeaderSticky.vue -->
 <script setup>
 import { useScroll } from '@vueuse/core'
-import { useCategoryStore } from '@/stores/category';
+import { useCategoryStore } from '@/stores/categoryStore';
 const { y } = useScroll(window) // 监听窗口滚动位置
 const categoryStore = useCategoryStore();
 // 页面滚动时获取分类数据（可选，根据实际需求决定是否需要）

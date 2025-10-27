@@ -2,7 +2,7 @@
 //import { getCategoryAPI } from '@/apis/category'
 //import { useRoute } from 'vue-router'
 //import { onMounted, ref } from 'vue'
-import { useBannerStore } from '@/stores/banner'
+import { useBannerStore } from '@/stores/bannersStore'
 import GoodsItem from '../Home/components/GoodsItem.vue' // 确保路径正确
 //import { onBeforeRouteUpdate } from 'vue-router'
 import {useCategory} from '@/views/Category/composables/useCategory'

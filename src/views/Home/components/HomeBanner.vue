@@ -14,7 +14,7 @@
 // onMounted(()=>{
 //   getBanner()
 // })
-import { useBannerStore } from '@/stores/banner';
+import { useBannerStore } from '@/stores/bannersStore';
 const bannerStore = useBannerStore();
 
 </script>
