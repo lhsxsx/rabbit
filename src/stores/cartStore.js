@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import {ref} from 'vue'
 import {computed} from 'vue'
 import{insertCartAPI,fineNewCartListAPI,delCartAPI} from '@/apis/cart.js'
-import { useUserStore } from "./user";
+import { useUserStore } from "./userStore";
 
 export const useCartStore= defineStore('cart',()=>{
   const cartList=ref([])
@@ -65,6 +65,7 @@ export const useCartStore= defineStore('cart',()=>{
   selectedCount,
   selectedPrice,
   clearCart,
+  updateNewCartList
    }
   },{
     persist:true
