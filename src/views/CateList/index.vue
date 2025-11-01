@@ -11,6 +11,13 @@ const singleCheck=(i,selected)=>{
 const allCheck=(selected)=>{
   cartStore.allCheck(selected)
 }
+const handleCountChange = async (goods) => {
+  if (cartStore.isLogin.value) {
+    // 调用更新数量的 API
+    await updateCartAPI(goods.skuId, goods.count)
+    cartStore.updateNewCartList()
+  }
+}
 </script>
 
 <template>
@@ -50,7 +57,7 @@ const allCheck=(selected)=>{
                 <p>&yen;{{ i.price }}</p>
               </td>
               <td class="tc">
-                <el-input-number v-model="i.count" />
+                <el-input-number v-model="i.count" @change="handleCountChange(i)" />
               </td>
               <td class="tc">
                 <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>

@@ -1,8 +1,13 @@
 
 <script setup>
-import { getCheckInfoAPI } from '@/apis/checkout';
+import { getCheckInfoAPI ,createOrderAPI} from '@/apis/checkout';
+import {useRouter} from 'vue-router';
 import {onMounted, ref} from 'vue'
-const checkInfo = ref({} )
+import { useCartStore } from '@/stores/cartStore';
+
+const cartStore=useCartStore()
+const router=useRouter()
+const checkInfo = ref({})
 const curAddress=ref({})
 const  getCheckInfo=async()=>{
  const res=await  getCheckInfoAPI()
@@ -14,6 +19,28 @@ onMounted(()=> getCheckInfo())
 
 const showDialog=ref(false)
 
+const switchAddress=(item)=>{
+  curAddress.value=item
+}
+const addFlag=ref(false)
+
+const createOrder=async()=>{
+
+  const res=await createOrderAPI({
+    deliveryTimeType:1,
+    payType:1,
+    payChannel:1,
+    buyerMessage:'',
+    goods:checkInfo.value.goods.map((item)=>({
+      skuId:item.skuId,
+      count:item.count
+    })),
+    addressId:curAddress.value.id
+  })
+  const orderId=res.result.id
+  router.push({path:'/pay',query:{Id:orderId}})
+  cartStore.updateNewCartList()
+}
  // 地址对象
 </script>
 
@@ -65,7 +92,7 @@ const showDialog=ref(false)
                   </a>
                 </td>
                 <td>&yen;{{ i.price }}</td>
-                <td>{{ i.price }}</td>
+                <td>{{ i.count }}</td>
                 <td>&yen;{{ i.totalPrice }}</td>
                 <td>&yen;{{ i.totalPayPrice }}</td>
               </tr>
@@ -114,7 +141,7 @@ const showDialog=ref(false)
 
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large">提交订单</el-button>
+          <el-button type="primary" size="large" @click="createOrder" >提交订单</el-button>
         </div>
       </div>
     </div>
@@ -123,7 +150,7 @@ const showDialog=ref(false)
   <!-- 切换地址 -->
    <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
   <div class="addressWrapper">
-    <div class="text item" v-for="item in checkInfo.userAddresses" :key="item.id">
+    <div class="text item" :class="{active:curAddress.id===item.id}" @click="switchAddress(item)" v-for="item in checkInfo.userAddresses" :key="item.id">
       <ul>
         <li>
           <span>收 货 人：</span>
@@ -143,7 +170,7 @@ const showDialog=ref(false)
   <template #footer>
     <span class="dialog-footer">
       <el-button>取消</el-button>
-      <el-button type="primary">确定</el-button>
+      <el-button type="primary" @click="showDialog=false">确定</el-button>
     </span>
   </template>
 </el-dialog>
