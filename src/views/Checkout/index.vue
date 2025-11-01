@@ -39,7 +39,7 @@ const createOrder=async()=>{
     addressId:curAddress.value.id
   })
   const orderId=res.result.id
-  router.push({path:'/pay',query:{Id:orderId}})
+  router.push({path:'/pay',query:{id:orderId}})
   cartStore.updateNewCartList()
 }
  // 地址对象
