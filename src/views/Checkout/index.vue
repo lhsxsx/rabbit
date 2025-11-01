@@ -19,6 +19,7 @@ onMounted(()=> getCheckInfo())
 
 const showDialog=ref(false)
 
+
 const switchAddress=(item)=>{
   curAddress.value=item
 }
@@ -42,6 +43,7 @@ const createOrder=async()=>{
   cartStore.updateNewCartList()
 }
  // 地址对象
+
 </script>
 
 <template>
@@ -150,7 +152,9 @@ const createOrder=async()=>{
   <!-- 切换地址 -->
    <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
   <div class="addressWrapper">
+
     <div class="text item" :class="{active:curAddress.id===item.id}" @click="switchAddress(item)" v-for="item in checkInfo.userAddresses" :key="item.id">
+
       <ul>
         <li>
           <span>收 货 人：</span>
@@ -169,8 +173,10 @@ const createOrder=async()=>{
   </div>
   <template #footer>
     <span class="dialog-footer">
+
       <el-button>取消</el-button>
       <el-button type="primary" @click="showDialog=false">确定</el-button>
+
     </span>
   </template>
 </el-dialog>
